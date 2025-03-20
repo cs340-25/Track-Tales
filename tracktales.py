@@ -42,3 +42,10 @@ def fetch_liked_songs():
         songs_list.append(song_data)
 
     return songs_list
+  
+  try:
+    artist_info = sp.artist(artist_id)
+    if "genres" in artist_info and artist_info["genres"]:
+        genre = artist_info["genres"][0]  # Use the first genre if available
+except Exception as e:
+  print(f"Error fetching genre for {song['artist']}: {e}")
