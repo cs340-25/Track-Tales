@@ -42,11 +42,9 @@ def get_artist_genre(songs_list):
     genre = artist_info["genres"][0]  # Use the first genre if available
 
   return songs_list
-    
+
 
 if __name__ == "__main__":
-    # Clear old data and insert new data
-    collection.delete_many({})
-    collection.insert_many(songs_list)
-
+    liked_songs = fetch_liked_songs()  # Initial data fetch
+    songs_with_genre = get_artist_genre(liked_songs)
     app.run(debug=True)
