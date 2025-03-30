@@ -14,13 +14,6 @@ client = pymongo.MongoClient("mongodb://localhost:27017/")
 db = client["spotify_data"]
 collection = db["liked_songs"]
 
-if __name__ == "__main__":
-    # Clear old data and insert new data
-    collection.delete_many({})
-    collection.insert_many(songs_list)
-
-    app.run(debug=True)
-
 # Function processes Json responses from API call
 def fetch_liked_songs():
     results = sp.current_user_saved_tracks()
@@ -42,10 +35,18 @@ def fetch_liked_songs():
         songs_list.append(song_data)
 
     return songs_list
-  
-  try:
-    artist_info = sp.artist(artist_id)
-    if "genres" in artist_info and artist_info["genres"]:
-        genre = artist_info["genres"][0]  # Use the first genre if available
-except Exception as e:
-  print(f"Error fetching genre for {song['artist']}: {e}")
+
+def get_artist_genre(songs_list):
+  artist_info = sp.artist(artist_id)
+  if "genres" in artist_info and artist_info["genres"]:
+    genre = artist_info["genres"][0]  # Use the first genre if available
+
+  return songs_list
+    
+
+if __name__ == "__main__":
+    # Clear old data and insert new data
+    collection.delete_many({})
+    collection.insert_many(songs_list)
+
+    app.run(debug=True)
