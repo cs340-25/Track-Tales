@@ -36,12 +36,34 @@ def fetch_liked_songs():
 
     return songs_list
 
-def get_artist_genre(songs_list):
-  artist_info = sp.artist(artist_id)
-  if "genres" in artist_info and artist_info["genres"]:
-    genre = artist_info["genres"][0]  # Use the first genre if available
+# Function maps each song to its genre using its correlated artist id
+def get_artist_genres(songs_list):
+    # Create a dictionary to avoid duplicate API calls for the same artist
+    artist_genres = {}
+    
+    for song in songs_list:
+        artist_id = song["artist_id"]
+        
+        # Check if we've already looked up this artist
+        if artist_id in artist_genres:
+            song["genre"] = artist_genres[artist_id]
+        else:
+            try:
+                # Get artist info from Spotify API
+                artist_info = sp.artist(artist_id)
+                genre = "Unknown"
 
-  return songs_list
+                # Use the first genre if available
+                if "genres" in artist_info and artist_info["genres"]:
+                    genre = artist_info["genres"][0]
+                
+                # Store genre for future reference
+                artist_genres[artist_id] = genre
+                song["genre"] = genre
+                except Exception as e:
+                    print(f"Error fetching genre for {song['artist']}: {e}")
+    
+    return songs_list
 
 
 if __name__ == "__main__":
