@@ -4,7 +4,7 @@ Data Visualization software for Spotify
 To run this locally:
 1. Install required dependencies and pycharm
 2. Make sure you are a verified user for the Spotify auth
-3. Run pyhton script and open the local host provided by Flask
+3. Run python script and open the local host provided by Flask
 
 
 Requirements:
