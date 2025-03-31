@@ -35,7 +35,7 @@ def fetch_liked_songs():
         songs_list.append(song_data)
 
     return songs_list
-
+  
 # Function maps each song to its genre using its correlated artist id
 def get_artist_genres(songs_list):
     # Create a dictionary to avoid duplicate API calls for the same artist
@@ -70,3 +70,10 @@ if __name__ == "__main__":
     liked_songs = fetch_liked_songs()  # Initial data fetch
     songs_with_genre = get_artist_genre(liked_songs)
     app.run(debug=True)
+# Fetch data from MongoDB and convert it into a DataFrame
+def fetch_data():
+    plotly_data = collection.find()
+    data = list(plotly_data)
+    df = pd.DataFrame(data)
+    df["parent"] = df["parent"].fillna("Root")
+    return df
