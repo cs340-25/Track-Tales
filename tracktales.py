@@ -65,11 +65,6 @@ def get_artist_genres(songs_list):
     
     return songs_list
 
-
-if __name__ == "__main__":
-    liked_songs = fetch_liked_songs()  # Initial data fetch
-    songs_with_genre = get_artist_genre(liked_songs)
-    app.run(debug=True)
 # Fetch data from MongoDB and convert it into a DataFrame
 def fetch_data():
     plotly_data = collection.find()
@@ -77,3 +72,12 @@ def fetch_data():
     df = pd.DataFrame(data)
     df["parent"] = df["parent"].fillna("Root")
     return df
+
+
+if __name__ == "__main__":
+    liked_songs = fetch_liked_songs()  # Initial data fetch
+    songs_with_genre = get_artist_genre(liked_songs)
+    if songs_with_genres:
+      collection.insert_many(songs_with_genres)
+    app.run(debug=True)
+
