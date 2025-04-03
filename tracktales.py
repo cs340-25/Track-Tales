@@ -19,7 +19,7 @@ def fetch_liked_songs():
     results = sp.current_user_saved_tracks()
     songs_list = []
 
-    # Go through responses & get various data from each song
+    # Go through responses & get data about each song
     for item in results["items"]:
         track = item["track"]
         song_data = {
