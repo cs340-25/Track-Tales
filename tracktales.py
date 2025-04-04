@@ -16,23 +16,34 @@ collection = db["liked_songs"]
 
 # Function processes Json responses from API call
 def fetch_liked_songs():
-    results = sp.current_user_saved_tracks()
     songs_list = []
+    
+    # spotify's limit of songs per request
+    limit = 50
+    offset = 0
 
-    # Go through responses & get data about each song
-    for item in results["items"]:
-        track = item["track"]
-        song_data = {
-            "name": track["name"],
-            "artist": track["artists"][0]["name"],
-            "artist_id": track["artists"][0]["id"],  # Needed for genre lookup
-            "album": track["album"]["name"],
-            "genre": "Unknown",
-            "value": 1,
-            "parent": track["artists"][0]["name"]
-        }
-        # Add the song's data to a song list array
-        songs_list.append(song_data)
+    while True:
+        results = sp.current_user_saved_tracks(limit=limit, offset=offset)
+        items = results['items']
+
+        # if there is no more items
+        if not items:
+            break
+        for item in results["items"]:
+            track = item["track"]
+            song_data = {
+                "name": track["name"],
+                "artist": track["artists"][0]["name"],
+                "artist_id": track["artists"][0]["id"],  # Needed for genre lookup
+                "album": track["album"]["name"],
+                "genre": "Unknown",
+                "value": 1,
+                "parent": track["artists"][0]["name"]
+            }
+            songs_list.append(song_data)
+        
+        # start at the last song you read
+        offset += limit
 
     return songs_list
   
