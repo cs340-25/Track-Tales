@@ -84,6 +84,21 @@ def fetch_data():
     df["parent"] = df["parent"].fillna("Root")
     return df
 
+@app.route('/')
+def home():
+    df = fetch_data()
+
+    # Create Plotly treemap
+    fig = px.treemap(df,
+                     path=["genre", "artist", "album", "name"],
+                     values="value",
+                     hover_data=["name"],
+                     title="Spotify Liked Songs Treemap")
+    fig.update_traces(root_color="lightgrey")
+    fig.update_layout(margin=dict(t=50, l=25, r=25, b=25))
+
+    plot_html = fig.to_html(full_html=False) 
+
 
 if __name__ == "__main__":
     liked_songs = fetch_liked_songs()  # Initial data fetch
