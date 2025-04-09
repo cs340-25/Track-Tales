@@ -82,6 +82,12 @@ def fetch_data():
     data = list(plotly_data)
     df = pd.DataFrame(data)
     df["parent"] = df["parent"].fillna("Root")
+
+    # Filter out genres with <= 1 song for better viewing purposes
+    genre_counts = df["genre"].value_counts()
+    valid_genres = genre_counts[genre_counts > 1].index
+    df = df[df["genre"].isin(valid_genres)]
+
     return df
 
 @app.route('/')
