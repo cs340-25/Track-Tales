@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify Liked Songs Visualization</title>
+    <style>
+        /* Layout styles */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            justify-content: flex-start;
+            padding: 20px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode {
+            background-color: #121212;
+            color: #121212;
+        }
+
+        .filters {
+            flex: 1;
+            margin-right: 10px;
+        }
+
+        .visualization {
+            flex: 3;
+            width: 70%;
+        }
+
+        .filters h3 {
+            margin-top: 0;
+        }
+
+        .filters div {
+            margin-bottom: 10px;
+        }
+
+        .filters button {
+            margin-top: 10px;
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+
+        .reset-button {
+            text-decoration: none;
+            margin-top: 10px;
+        }
+
+        /* Make the checkbox list scrollable if there are many genres */
+        .genre-checkboxes {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .filters {
+            padding: 20px;
+            background-color: #f7f7f7;
+            border-radius: 8px;
+        }
+
+        /* Style the checkboxes and labels */
+        .checkbox-container {
+            margin-bottom: 8px;
+        }
+
+        .checkbox-container label {
+            margin-left: 8px;
+        }
+
+        /* Dark mode styles for buttons */
+        .filters button, .reset-button {
+            background-color: #007bff; /* Blue color */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        body.dark-mode .filters button, body.dark-mode .reset-button {
+            background-color: #0056b3; /* Darker blue for dark mode */
+        }
+
+        /* Toggle button styles */
+        .toggle-btn {
+            margin-top: 20px;
+            padding: 8px 16px;
+            background-color: #007bff; /* Blue color */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        body.dark-mode .toggle-btn {
+            background-color: #0056b3; /* Darker blue for dark mode */
+        }
+
+        .toggle-btn:hover {
+            background-color: #0056b3;
+        }
+
+        body.dark-mode .toggle-btn:hover {
+            background-color: #003f7f;
+        }
+    </style>
+</head>
+<body>
+    <div class="filters">
+        <h3>Select genres to filter:</h3>
+        <form action="/apply_filter" method="get"> <!-- Add a form tag -->
+            <div class="genre-checkboxes">
+                {% for genre in genres %}
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="{{ genre }}" name="genres" value="{{ genre }}"
+                        {% if genre in selected_genres %} checked {% endif %}>
+                        <label for="{{ genre }}">{{ genre }}</label>
+                    </div>
+                {% endfor %}
+            </div>
+            
+            <div class="view-selection">
+                <h4>Select View Type:</h4>
+                <label>
+                    <input type="radio" name="view" value="sunburst" {% if request.args.get('view') == 'sunburst' %} checked {% endif %}>
+                    Sunburst
+                </label><br>
+                <label>
+                    <input type="radio" name="view" value="treemap" {% if request.args.get('view') == 'treemap' %} checked {% endif %}>
+                    Treemap
+                </label>
+            </div>
+            
+            <button type="submit">Apply Filter</button>
+            
+            <!-- Reset Button (doesn't trigger form submit) -->
+            <a href="/" class="reset-button">
+                <button type="button">Reset Filter</button>
+            </a>
+        </form>
+    </div>
+
+    <div class="visualization">
+        <h2>Visualization</h2>
+        {{ plot_html | safe }}
+
+        <!-- Dark/Light Mode Toggle Button -->
+        <button class="toggle-btn" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+    </div>
+
+    <script>
+        // Function to toggle dark mode
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+    </script>
+</body>
+</html>
