@@ -118,13 +118,13 @@ def apply_filter():
                           path=["genre", "artist", "album", "name"],
                           values="value",
                           hover_data=["name"],
-                          title="Spotify Liked Songs Sunburst")
+                          title="Sunburst View")
     else:  # Default to treemap
         fig = px.treemap(df,
                          path=["genre", "artist", "album", "name"],
                          values="value",
                          hover_data=["name"],
-                         title="Spotify Liked Songs Treemap")
+                         title="Treemap View")
 
     # Update Plotly figure
     fig.update_traces(root_color="lightgrey")
@@ -158,13 +158,13 @@ def home():
                           path=["genre", "artist", "album", "name"],
                           values="value",
                           hover_data=["name"],
-                          title="Spotify Liked Songs Sunburst")
+                          title="Sunburst View")
     else:
         fig = px.treemap(df,
                          path=["genre", "artist", "album", "name"],
                          values="value",
                          hover_data=["name"],
-                         title="Spotify Liked Songs Treemap")
+                         title="Treemap View")
 
     # Update Plotly figure
     fig.update_traces(root_color="lightgrey")
